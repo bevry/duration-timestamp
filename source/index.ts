@@ -10,39 +10,113 @@ export const secondsInHour = secondsInMinute * minutesInHour
 
 /** Timestamp object */
 export interface Timestamp {
-	/** Total number of seconds, including from hours and minutes */
+	/**
+	 * Total number of seconds, including from hours and minutes.
+	 */
 	total: number
-	/** Seconds excluding hours and minutes */
+	/**
+	 * Seconds excluding hours and minutes.
+	 * Will not exist if the seconds were not provided.
+	 */
 	seconds?: number
-	/** Minutes excluding hours */
+	/**
+	 * Minutes excluding hours.
+	 * Will not exist if the minutes were not provided.
+	 */
 	minutes?: number
-	/** Hours */
+	/**
+	 * Hours.
+	 * Will not exist if the hours were not provided.
+	 */
 	hours?: number
 }
 
-/** Turn a timestamp object into a string */
-export function stringifyTimestamp({
-	total,
-	hours,
-	minutes,
-	seconds,
-}: Timestamp): string {
-	if (total) {
-		const parts = []
-		if (Number(hours)) parts.push(`${hours}h`)
-		if (Number(minutes)) parts.push(`${minutes}m`)
-		if (Number(seconds)) parts.push(`${seconds}s`)
-		return parts.join(' ') || '00s'
-	}
-	return ''
+/**
+ * Checks whether any of the timestamp's `hours`, `minutes`, and `seconds` has a value >= 0.
+ * @returns `true` if there was a value, otherwise `false`.
+ */
+export function verifyTimestamp(
+	timestamp: { hours?: any; minutes?: any; seconds?: any } | null
+): boolean {
+	if (timestamp == null) return false
+	const { hours, minutes, seconds } = timestamp
+	if (hours == null && minutes == null && seconds == null) return false
+	return true
 }
 
-/** Make a timestamp object from hours, minutes, and seconds */
+/** The timestamp stringify formats available to us */
+export enum Format {
+	Numeric = '00:00:00',
+	Seconds = '0s',
+	Tiny = '0h0m0s',
+	Short = '0h 0m 0s',
+	Medium = '0 hours 0 mins 0 secs',
+	Long = '0 hours 0 minutes 0 seconds',
+}
+
+/** Pad a value for output in 00:00:00 format */
+function pad(value?: string | number): string {
+	if (!value) return '00'
+	if (value < 10) return '0' + String(value)
+	return String(value)
+}
+
+/**
+ * Turn a timestamp object into a string.
+ * @returns `null` if invalid, `00s` if empty, otherwise the timestamp in `Hh Mm Ss` format
+ */
+export function stringifyTimestamp(
+	timestamp: Timestamp | null,
+	format: Format = Format.Short
+): string | null {
+	if (verifyTimestamp(timestamp) === false) return null
+	const { total, hours, minutes, seconds } = timestamp as Timestamp
+	const parts = []
+	switch (format) {
+		case Format.Short:
+			if (Number(hours)) parts.push(`${hours}h`)
+			if (Number(minutes)) parts.push(`${minutes}m`)
+			if (Number(seconds)) parts.push(`${seconds}s`)
+			return parts.join(' ') || '00s'
+		case Format.Tiny:
+			if (Number(hours)) parts.push(`${hours}h`)
+			if (Number(minutes)) parts.push(`${minutes}m`)
+			if (Number(seconds)) parts.push(`${seconds}s`)
+			return parts.join('') || '0s'
+		case Format.Medium:
+			if (Number(hours)) parts.push(`${hours} hours`)
+			if (Number(minutes)) parts.push(`${minutes} mins`)
+			if (Number(seconds)) parts.push(`${seconds} secs`)
+			return parts.join(' ') || '0 secs'
+		case Format.Long:
+			if (Number(hours)) parts.push(`${hours} hours`)
+			if (Number(minutes)) parts.push(`${minutes} minutes`)
+			if (Number(seconds)) parts.push(`${seconds} seconds`)
+			return parts.join(' ') || '0 seconds'
+		case Format.Numeric:
+			if (Number(hours)) {
+				parts.push(hours, pad(minutes), pad(seconds))
+			} else {
+				parts.push(minutes || '0', pad(seconds))
+			}
+			return parts.join(':')
+		case Format.Seconds:
+			return String(total) + 's'
+		default:
+			throw new Error('stringifyTimestamp: invalid format')
+	}
+}
+
+/**
+ * Make a timestamp object from hours, minutes, and seconds.
+ * Will return an empty object, if the timestamp
+ */
 export function makeTimestamp(
 	hours?: string | number,
 	minutes?: string | number,
 	seconds?: string | number
-) {
+): Timestamp | null {
+	if (verifyTimestamp({ hours, minutes, seconds }) === false) return null
 	const timestamp: Timestamp = { total: 0 }
 	if (hours != null) {
 		timestamp.hours = Number(hours)
@@ -126,11 +200,15 @@ export function replaceTimestamps(
 export function makeYoutubeTimestamp(
 	timestamp: Timestamp,
 	youtubeID: string,
-	suffix: string = ''
+	suffix: string = '',
+	format?: Format
 ) {
-	const text = stringifyTimestamp(timestamp)
+	const text = stringifyTimestamp(timestamp, format)
 	if (text) {
-		const url = `https://www.youtube.com/watch?v=${youtubeID}&t=${timestamp.total}s`
+		const url = `https://www.youtube.com/watch?v=${youtubeID}&t=${stringifyTimestamp(
+			timestamp,
+			Format.Tiny
+		)}`
 		return `<a href="${url}" title="View the video ${youtubeID} at ${text}">${text}</a>${suffix}`
 	}
 	return text

@@ -1,6 +1,6 @@
 {
   "name": "extract-timestamp",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Get the hours, minutes, and seconds from a timestamp in the formats of hh:mm:ss and HsMmSs",
   "homepage": "https://github.com/bevry/extract-timestamp",
   "license": "MIT",
@@ -160,5 +160,8 @@
     "semi": false,
     "singleQuote": true
   },
-  "contributors": []
+  "contributors": [
+    "Benjamin Lupton <b@lupton.cc>",
+    "Benjamin Lupton (http://balupton.com)"
+  ]
 }

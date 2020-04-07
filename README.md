@@ -35,7 +35,7 @@ Get the hours, minutes, and seconds from a timestamp in the formats of hh:mm:ss 
 
 ## Usage
 
-[Complete API Documentation.](http://master..bevry.surge.sh/docs/globals.html)
+[Complete API Documentation.](http://master.extract-timestamp.bevry.surge.sh/docs/globals.html)
 
 <!-- INSTALL/ -->
 
@@ -52,7 +52,7 @@ Get the hours, minutes, and seconds from a timestamp in the formats of hh:mm:ss 
 
 ``` html
 <script type="module">
-    import * as pkg from '//cdn.pika.dev/extract-timestamp/^1.0.0'
+    import * as pkg from '//cdn.pika.dev/extract-timestamp/^1.1.0'
 </script>
 ```
 
@@ -60,7 +60,7 @@ Get the hours, minutes, and seconds from a timestamp in the formats of hh:mm:ss 
 
 ``` html
 <script type="module">
-    import * as pkg from '//unpkg.com/extract-timestamp@^1.0.0'
+    import * as pkg from '//unpkg.com/extract-timestamp@^1.1.0'
 </script>
 ```
 
@@ -68,7 +68,7 @@ Get the hours, minutes, and seconds from a timestamp in the formats of hh:mm:ss 
 
 ``` html
 <script type="module">
-    import * as pkg from '//dev.jspm.io/extract-timestamp@1.0.0'
+    import * as pkg from '//dev.jspm.io/extract-timestamp@1.1.0'
 </script>
 ```
 
@@ -128,7 +128,10 @@ No sponsors yet! Will you be the first?
 
 <h3>Contributors</h3>
 
-No contributors yet! Will you be the first?
+These amazing people have contributed code to this project:
+
+<ul><li>Benjamin Lupton</li>
+<li><a href="http://balupton.com">Benjamin Lupton</a> — <a href="https://github.com/bevry/extract-timestamp/commits?author=balupton" title="View the GitHub contributions of Benjamin Lupton on repository bevry/extract-timestamp">view contributions</a></li></ul>
 
 <a href="https://github.com/bevry/extract-timestamp/blob/master/CONTRIBUTING.md#files">Discover how you can contribute by heading on over to the <code>CONTRIBUTING.md</code> file.</a>
 
