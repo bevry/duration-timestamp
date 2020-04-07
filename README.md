@@ -37,6 +37,13 @@ Get the hours, minutes, and seconds from a timestamp in the formats of hh:mm:ss 
 
 [Complete API Documentation.](http://master.extract-timestamp.bevry.surge.sh/docs/globals.html)
 
+### Compatibility
+
+Node.js, Safari, and Google Chrome are supported.
+
+Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla.org/show_bug.cgi?id=1362154) for [named capture groups](https://github.com/tc39/proposal-regexp-named-groups) for regular expressions.
+
+
 <!-- INSTALL/ -->
 
 <h2>Install</h2>
