@@ -214,34 +214,76 @@ export function makeYoutubeTimestamp(
 	return text
 }
 
-/** Extract the first youtube video identifier that is found within an element */
-export function extractYoutubeID(el: HTMLElement): string {
-	// prepare
-	let youtubeID, child
-
+/** The selectors we use to identify a YouTube video. */
+const selectors = {
 	// href is first
 	// as https://discuss.bevry.me/t/maps-of-meaning-9/31 links to the topic video
 	// but embeds the discussion video
-	child = el.querySelector('[href^="https://www.youtube.com/watch?v="]')
-	const href = child && child.getAttribute('href')
-	if (href) {
-		const url = new URL(href)
-		youtubeID = url.searchParams.get('v')
-		if (youtubeID) return youtubeID
-	}
+	href: '[href^="https://www.youtube.com/watch?v="]:not(.youtube-timetamp)',
+	embedHref: '[href^="https://www.youtube.com/embed/"]',
+	player: '[data-youtube-id]',
+	embed: '[src^="https://www.youtube.com/embed/"]',
+}
 
-	// player
-	child = el.querySelector('[data-youtube-id]')
-	youtubeID = child && child.getAttribute('data-youtube-id')
-	if (youtubeID) return youtubeID
+/** The regular expression used to fetch the YouTube Video ID from a YouTube Embed Link */
+const embedHrefRegex = /^.+?\/embed\/([^/]+?)([/?]+.*)?/
 
-	// embed
-	child = el.querySelector('[src^="https://www.youtube.com/embed/"]')
-	const src = child && child.getAttribute('src')
-	if (src) {
-		const url = new URL(src)
-		youtubeID = url.pathname.substring(7)
-		if (youtubeID) return youtubeID
+/** The selector that aggregates all the earlier selectors */
+const selectorAll = Array.from(Object.values(selectors)).join(', ')
+
+/**
+ * Check if the element is a selector.
+ * http://youmightnotneedjquery.com/#matches_selector
+ */
+function matches(el: Element, selector: string) {
+	return (
+		el.matches ||
+		(el as any).matchesSelector ||
+		(el as any).msMatchesSelector ||
+		(el as any).mozMatchesSelector ||
+		el.webkitMatchesSelector ||
+		(el as any).oMatchesSelector
+	).call(el, selector)
+}
+
+/** Extract the first youtube video identifier that is found within an element */
+export function extractYoutubeID(el: HTMLElement): string {
+	// fetch
+	for (const child of el.querySelectorAll(selectorAll)) {
+		// href
+		if (matches(child, selectors.href)) {
+			const href = child.getAttribute('href')
+			if (href) {
+				const url = new URL(href)
+				const youtubeID = url.searchParams.get('v')
+				if (youtubeID) return youtubeID
+			}
+		}
+
+		// embed href
+		if (matches(child, selectors.embedHref)) {
+			const href = child.getAttribute('href')
+			if (href) {
+				const youtubeID = href.replace(embedHrefRegex, '$1')
+				if (youtubeID) return youtubeID
+			}
+		}
+
+		// player
+		if (matches(child, selectors.player)) {
+			const youtubeID = child.getAttribute('data-youtube-id')
+			if (youtubeID) return youtubeID
+		}
+
+		// embed
+		if (matches(child, selectors.embed)) {
+			const src = child.getAttribute('src')
+			if (src) {
+				const url = new URL(src)
+				const youtubeID = url.pathname.substring(7)
+				if (youtubeID) return youtubeID
+			}
+		}
 	}
 
 	// debug
