@@ -220,6 +220,7 @@ const selectors = {
 	// as https://discuss.bevry.me/t/maps-of-meaning-9/31 links to the topic video
 	// but embeds the discussion video
 	href: '[href^="https://www.youtube.com/watch?v="]:not(.youtube-timetamp)',
+	shortHref: '[href^="https://youtu.be/"]',
 	embedHref: '[href^="https://www.youtube.com/embed/"]',
 	player: '[data-youtube-id]',
 	embed: '[src^="https://www.youtube.com/embed/"]',
@@ -256,6 +257,16 @@ export function extractYoutubeID(el: HTMLElement): string {
 			if (href) {
 				const url = new URL(href)
 				const youtubeID = url.searchParams.get('v')
+				if (youtubeID) return youtubeID
+			}
+		}
+
+		// short href
+		if (matches(child, selectors.shortHref)) {
+			const href = child.getAttribute('href')
+			if (href) {
+				const url = new URL(href)
+				const youtubeID = url.pathname.split('/')[1]
 				if (youtubeID) return youtubeID
 			}
 		}

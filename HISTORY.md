@@ -1,5 +1,9 @@
 # History
 
+## v1.3.0 2020 April 20
+
+-   Improved `extractYoutubeID` handling - it can now fetch youtube video ids from youtube shortlinks like <https://youtu.be/I8Xc2_FtpHI>
+
 ## v1.2.0 2020 April 17
 
 -   Improved `extractYoutubeID` handling - it now cycles through the elements of any type - rather than cycles through the elements of each type

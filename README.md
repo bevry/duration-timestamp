@@ -58,7 +58,7 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 ``` html
 <script type="module">
-    import * as pkg from '//cdn.pika.dev/extract-timestamp/^1.2.0'
+    import * as pkg from '//cdn.pika.dev/extract-timestamp/^1.3.0'
 </script>
 ```
 
@@ -66,7 +66,7 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 ``` html
 <script type="module">
-    import * as pkg from '//unpkg.com/extract-timestamp@^1.2.0'
+    import * as pkg from '//unpkg.com/extract-timestamp@^1.3.0'
 </script>
 ```
 
@@ -74,7 +74,7 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 ``` html
 <script type="module">
-    import * as pkg from '//dev.jspm.io/extract-timestamp@1.2.0'
+    import * as pkg from '//dev.jspm.io/extract-timestamp@1.3.0'
 </script>
 ```
 
@@ -137,7 +137,7 @@ No sponsors yet! Will you be the first?
 These amazing people have contributed code to this project:
 
 <ul><li>Benjamin Lupton</li>
-<li><a href="http://balupton.com">Benjamin Lupton</a></li></ul>
+<li><a href="http://balupton.com">Benjamin Lupton</a> — <a href="https://github.com/bevry/extract-timestamp/commits?author=balupton" title="View the GitHub contributions of Benjamin Lupton on repository bevry/extract-timestamp">view contributions</a></li></ul>
 
 <a href="https://github.com/bevry/extract-timestamp/blob/master/CONTRIBUTING.md#files">Discover how you can contribute by heading on over to the <code>CONTRIBUTING.md</code> file.</a>
 
