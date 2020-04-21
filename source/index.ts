@@ -156,8 +156,14 @@ function extractTimestampFromGroup(
 }
 
 /** Extract the timestamp out of a string */
-export function extractTimestamp(input: string): Timestamp | null {
-	const match = input.match(timestampsRegex)
+export function extractTimestamp(
+	input: string,
+	suffix: string = ''
+): Timestamp | null {
+	const regex = suffix
+		? new RegExp(timestampsRegex.source + suffix)
+		: timestampsRegex
+	const match = input.match(regex)
 	return extractTimestampFromGroup(match && match.groups)
 }
 
@@ -176,22 +182,18 @@ export function extractTimestamp(input: string): Timestamp | null {
  */
 export function replaceTimestamps(
 	input: string,
-	replacer: (timestamp: Timestamp | null) => string,
+	replacer: (timestamp: Timestamp) => string | null | undefined | void,
 	suffix: string = ''
 ) {
 	const regex = new RegExp(timestampsRegex.source + suffix, 'g')
 	return input.replace(regex, function (match, ...args) {
 		const timestamp = extractTimestampFromGroup(args[args.length - 1])
-
-		// check we have what we need
-		const text = replacer(timestamp)
-		if (text) {
-			console.log('replaced:', text)
-			return text
+		// check if timestamp extraction was successful
+		if (timestamp) {
+			// check we have what we need
+			const text = replacer(timestamp)
+			if (text != null) return text
 		}
-
-		// fallback
-		console.log('fallback:', match)
 		return match
 	})
 }

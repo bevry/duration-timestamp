@@ -58,7 +58,7 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 ``` html
 <script type="module">
-    import * as pkg from '//cdn.pika.dev/extract-timestamp/^1.4.0'
+    import * as pkg from '//cdn.pika.dev/extract-timestamp/^1.5.0'
 </script>
 ```
 
@@ -66,7 +66,7 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 ``` html
 <script type="module">
-    import * as pkg from '//unpkg.com/extract-timestamp@^1.4.0'
+    import * as pkg from '//unpkg.com/extract-timestamp@^1.5.0'
 </script>
 ```
 
@@ -74,7 +74,7 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 ``` html
 <script type="module">
-    import * as pkg from '//dev.jspm.io/extract-timestamp@1.4.0'
+    import * as pkg from '//dev.jspm.io/extract-timestamp@1.5.0'
 </script>
 ```
 

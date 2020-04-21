@@ -1,5 +1,11 @@
 # History
 
+## v1.5.0 2020 April 21
+
+-   Add suffix support to `extractTimestamp`
+-   Replacer of `replaceTimestamps` will now only be called if there was actually a timestamp to give it
+-   Replacer of `replaceTimestamps` can now replace with an empty string, and skip replacement by returning nothing
+
 ## v1.4.0 2020 April 21
 
 -   Added `extractYoutubePlaylistID`
