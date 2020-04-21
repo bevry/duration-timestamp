@@ -1,6 +1,6 @@
 {
   "name": "extract-timestamp",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Get the hours, minutes, and seconds from a timestamp in the formats of hh:mm:ss and HsMmSs",
   "homepage": "https://github.com/bevry/extract-timestamp",
   "license": "MIT",
@@ -77,7 +77,21 @@
       "engines": false
     },
     {
-      "description": "TypeScript compiled against ESNext for web browsers with Import for modules",
+      "description": "TypeScript compiled against ES2019 for Node.js with Require for modules",
+      "directory": "edition-es2019",
+      "entry": "index.js",
+      "tags": [
+        "javascript",
+        "es2019",
+        "require"
+      ],
+      "engines": {
+        "node": "10 || 12 || 13",
+        "browsers": false
+      }
+    },
+    {
+      "description": "TypeScript compiled against ES2019 for web browsers with Import for modules",
       "directory": "edition-browsers",
       "entry": "index.js",
       "tags": [
@@ -88,25 +102,11 @@
         "node": false,
         "browsers": "defaults"
       }
-    },
-    {
-      "description": "TypeScript compiled against ES2018 for Node.js with Require for modules",
-      "directory": "edition-es2018",
-      "entry": "index.js",
-      "tags": [
-        "javascript",
-        "es2018",
-        "require"
-      ],
-      "engines": {
-        "node": "10 || 12 || 13",
-        "browsers": false
-      }
     }
   ],
   "types": "source/index.ts",
   "type": "commonjs",
-  "main": "edition-es2018/index.js",
+  "main": "edition-es2019/index.js",
   "browser": "edition-browsers/index.js",
   "module": "edition-browsers/index.js",
   "devDependencies": {
@@ -129,9 +129,9 @@
   },
   "scripts": {
     "our:clean": "rm -Rf ./docs ./edition* ./es2015 ./es5 ./out ./.next",
-    "our:compile": "npm run our:compile:edition-browsers && npm run our:compile:edition-es2018",
-    "our:compile:edition-browsers": "tsc --module ESNext --target ESNext --outDir ./edition-browsers --project tsconfig.json && test -d edition-browsers/source && ( mv edition-browsers/source edition-temp && rm -Rf edition-browsers && mv edition-temp edition-browsers ) || true",
-    "our:compile:edition-es2018": "tsc --module commonjs --target ES2018 --outDir ./edition-es2018 --project tsconfig.json && test -d edition-es2018/source && ( mv edition-es2018/source edition-temp && rm -Rf edition-es2018 && mv edition-temp edition-es2018 ) || true",
+    "our:compile": "npm run our:compile:edition-browsers && npm run our:compile:edition-es2019",
+    "our:compile:edition-browsers": "tsc --module ESNext --target ES2019 --outDir ./edition-browsers --project tsconfig.json && test -d edition-browsers/source && ( mv edition-browsers/source edition-temp && rm -Rf edition-browsers && mv edition-temp edition-browsers ) || true",
+    "our:compile:edition-es2019": "tsc --module commonjs --target ES2019 --outDir ./edition-es2019 --project tsconfig.json && test -d edition-es2019/source && ( mv edition-es2019/source edition-temp && rm -Rf edition-es2019 && mv edition-temp edition-es2019 ) || true",
     "our:deploy": "echo no need for this project",
     "our:meta": "npm run our:meta:contributors && npm run our:meta:docs && npm run our:meta:projectz",
     "our:meta:contributors": "update-contributors",
@@ -153,7 +153,7 @@
     "our:verify:module": "valid-module",
     "our:verify:prettier": "prettier --write .",
     "our:verify:typescript": "tsc --noEmit --project tsconfig.json",
-    "test": "node ./edition-es2018/test.js"
+    "test": "node ./edition-es2019/test.js"
   },
   "eslintConfig": {
     "extends": [

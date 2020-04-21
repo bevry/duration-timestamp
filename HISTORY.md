@@ -1,5 +1,9 @@
 # History
 
+## v2.1.0 2020 April 22
+
+-   Change edition compile targets to be more compatible
+
 ## v2.0.0 2020 April 22
 
 -   Backwards compatibility break to simplify the signatures of the methods to provide more sanity to operations
