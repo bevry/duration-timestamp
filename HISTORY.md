@@ -1,5 +1,9 @@
 # History
 
+## v1.4.0 2020 April 21
+
+-   Added `extractYoutubePlaylistID`
+
 ## v1.3.0 2020 April 20
 
 -   Improved `extractYoutubeID` handling - it can now fetch youtube video ids from youtube shortlinks like <https://youtu.be/I8Xc2_FtpHI>

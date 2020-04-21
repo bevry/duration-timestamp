@@ -214,23 +214,33 @@ export function makeYoutubeTimestamp(
 	return text
 }
 
-/** The selectors we use to identify a YouTube video. */
-const selectors = {
+/** The regular expression used to fetch the YouTube Video ID from a YouTube Embed Link */
+const embedHrefRegex = /^.+?\/embed\/([^/]+?)([/?]+.*)?/
+
+/** The selectors we use to identify a YouTube video */
+const videoSelectors = {
 	// href is first
 	// as https://discuss.bevry.me/t/maps-of-meaning-9/31 links to the topic video
 	// but embeds the discussion video
-	href: '[href^="https://www.youtube.com/watch?v="]:not(.youtube-timetamp)',
+	href: '[href^="https://www.youtube.com/watch"]:not(.youtube-timetamp)',
 	shortHref: '[href^="https://youtu.be/"]',
 	embedHref: '[href^="https://www.youtube.com/embed/"]',
 	player: '[data-youtube-id]',
 	embed: '[src^="https://www.youtube.com/embed/"]',
 }
 
-/** The regular expression used to fetch the YouTube Video ID from a YouTube Embed Link */
-const embedHrefRegex = /^.+?\/embed\/([^/]+?)([/?]+.*)?/
+/** The selector that aggregates all the earlier selectors */
+const videoSelector = Array.from(Object.values(videoSelectors)).join(', ')
+
+/** The selectors we use to identify a playist */
+const playlistSelectors = {
+	video: '[href^="https://www.youtube.com/watch"]',
+	direct: '[href^="https://www.youtube.com/playlist"]',
+	embed: '[src^="https://www.youtube.com/embed/"]',
+}
 
 /** The selector that aggregates all the earlier selectors */
-const selectorAll = Array.from(Object.values(selectors)).join(', ')
+const playlistSelector = Array.from(Object.values(playlistSelectors)).join(', ')
 
 /**
  * Check if the element is a selector.
@@ -250,9 +260,9 @@ function matches(el: Element, selector: string) {
 /** Extract the first youtube video identifier that is found within an element */
 export function extractYoutubeID(el: HTMLElement): string {
 	// fetch
-	for (const child of el.querySelectorAll(selectorAll)) {
+	for (const child of el.querySelectorAll(videoSelector)) {
 		// href
-		if (matches(child, selectors.href)) {
+		if (matches(child, videoSelectors.href)) {
 			const href = child.getAttribute('href')
 			if (href) {
 				const url = new URL(href)
@@ -262,7 +272,7 @@ export function extractYoutubeID(el: HTMLElement): string {
 		}
 
 		// short href
-		if (matches(child, selectors.shortHref)) {
+		if (matches(child, videoSelectors.shortHref)) {
 			const href = child.getAttribute('href')
 			if (href) {
 				const url = new URL(href)
@@ -272,7 +282,7 @@ export function extractYoutubeID(el: HTMLElement): string {
 		}
 
 		// embed href
-		if (matches(child, selectors.embedHref)) {
+		if (matches(child, videoSelectors.embedHref)) {
 			const href = child.getAttribute('href')
 			if (href) {
 				const youtubeID = href.replace(embedHrefRegex, '$1')
@@ -281,19 +291,36 @@ export function extractYoutubeID(el: HTMLElement): string {
 		}
 
 		// player
-		if (matches(child, selectors.player)) {
+		if (matches(child, videoSelectors.player)) {
 			const youtubeID = child.getAttribute('data-youtube-id')
 			if (youtubeID) return youtubeID
 		}
 
 		// embed
-		if (matches(child, selectors.embed)) {
+		if (matches(child, videoSelectors.embed)) {
 			const src = child.getAttribute('src')
 			if (src) {
 				const url = new URL(src)
 				const youtubeID = url.pathname.substring(7)
 				if (youtubeID) return youtubeID
 			}
+		}
+	}
+
+	// debug
+	// console.log('this:', $this.html())
+	return ''
+}
+
+/** Extract the first youtube playlist identifier that is found within an element */
+export function extractYoutubePlaylistID(el: HTMLElement): string {
+	// fetch
+	for (const child of el.querySelectorAll(playlistSelector)) {
+		const value = child.getAttribute('href') || child.getAttribute('src')
+		if (value) {
+			const url = new URL(value)
+			const youtubeID = url.searchParams.get('list')
+			if (youtubeID) return youtubeID
 		}
 	}
 
