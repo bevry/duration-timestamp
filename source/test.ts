@@ -1,22 +1,26 @@
-import { equal, deepEqual } from 'assert-helpers'
+import { equal, deepEqual, errorEqual } from 'assert-helpers'
 import kava from 'kava'
 import {
 	Format,
 	secondsInHour,
 	secondsInMinute,
-	extractTimestamp,
-	replaceTimestamps,
-	stringifyTimestamp,
+	parse,
+	replace,
+	stringify,
+	Timestamp,
 } from './index.js'
 
-const extractTests = [
+const extractTests: Array<
+	| { input: string; result: Timestamp; error?: undefined }
+	| { input: string; result?: undefined; error: string }
+> = [
 	{
 		input: '00',
-		result: null,
+		error: 'capture group',
 	},
 	{
 		input: '0',
-		result: null,
+		error: 'capture group',
 	},
 	{
 		input: '00:00',
@@ -24,6 +28,7 @@ const extractTests = [
 			total: 0,
 			seconds: 0,
 			minutes: 0,
+			hours: 0,
 		},
 	},
 	{
@@ -32,6 +37,7 @@ const extractTests = [
 			total: 0,
 			seconds: 0,
 			minutes: 0,
+			hours: 0,
 		},
 	},
 	{
@@ -58,6 +64,7 @@ const extractTests = [
 			total: 3 + 2 * secondsInMinute,
 			seconds: 3,
 			minutes: 2,
+			hours: 0,
 		},
 	},
 	{
@@ -66,6 +73,7 @@ const extractTests = [
 			total: 33 + 22 * secondsInMinute,
 			seconds: 33,
 			minutes: 22,
+			hours: 0,
 		},
 	},
 	{
@@ -91,19 +99,25 @@ const extractTests = [
 		result: {
 			total: 0,
 			seconds: 0,
+			minutes: 0,
+			hours: 0,
 		},
 	},
 	{
 		input: '0m',
 		result: {
 			total: 0,
+			seconds: 0,
 			minutes: 0,
+			hours: 0,
 		},
 	},
 	{
 		input: '0h',
 		result: {
 			total: 0,
+			seconds: 0,
+			minutes: 0,
 			hours: 0,
 		},
 	},
@@ -112,19 +126,25 @@ const extractTests = [
 		result: {
 			total: 3,
 			seconds: 3,
+			minutes: 0,
+			hours: 0,
 		},
 	},
 	{
 		input: '2m',
 		result: {
 			total: 2 * secondsInMinute,
+			seconds: 0,
 			minutes: 2,
+			hours: 0,
 		},
 	},
 	{
 		input: '1h',
 		result: {
 			total: secondsInHour,
+			seconds: 0,
+			minutes: 0,
 			hours: 1,
 		},
 	},
@@ -133,6 +153,7 @@ const extractTests = [
 		result: {
 			total: 3 + secondsInHour,
 			seconds: 3,
+			minutes: 0,
 			hours: 1,
 		},
 	},
@@ -142,6 +163,7 @@ const extractTests = [
 			total: 3 + 2 * secondsInMinute,
 			seconds: 3,
 			minutes: 2,
+			hours: 0,
 		},
 	},
 	{
@@ -190,12 +212,12 @@ const formatTests = [
 			total: 0,
 		},
 		formats: {
-			[Format.Numeric]: null,
-			[Format.Seconds]: null,
-			[Format.Tiny]: null,
-			[Format.Short]: null,
-			[Format.Medium]: null,
-			[Format.Long]: null,
+			[Format.Numeric]: '0:00',
+			[Format.Seconds]: '0s',
+			[Format.Tiny]: '0s',
+			[Format.Short]: '00s',
+			[Format.Medium]: '0 secs',
+			[Format.Long]: '0 seconds',
 		},
 	},
 	{
@@ -331,19 +353,19 @@ const replaceTest = {
 01 hours 02 minutes
 02 mins`,
 	replaceResult: `
-00 01 {"total":0,"minutes":0,"seconds":0} {"total":60,"minutes":1,"seconds":0} {"total":62,"minutes":1,"seconds":2}
-{"total":0,"hours":0,"minutes":0,"seconds":0} {"total":3600,"hours":1,"minutes":0,"seconds":0} {"total":3723,"hours":1,"minutes":2,"seconds":3}
-{"total":0,"minutes":0,"seconds":0}
-{"total":0,"seconds":0}
-{"total":1,"seconds":1}
-{"total":0,"minutes":0,"seconds":0}
-{"total":0,"minutes":0,"seconds":0}
-{"total":0,"minutes":0,"seconds":0}
-{"total":61,"minutes":1,"seconds":1}
-{"total":0,"hours":0,"minutes":0,"seconds":0}
-{"total":3723,"hours":1,"minutes":2,"seconds":3}
-{"total":3720,"hours":1,"minutes":2}
-{"total":120,"minutes":2}`,
+00 01 {"hours":0,"minutes":0,"seconds":0,"total":0} {"hours":0,"minutes":1,"seconds":0,"total":60} {"hours":0,"minutes":1,"seconds":2,"total":62}
+{"hours":0,"minutes":0,"seconds":0,"total":0} {"hours":1,"minutes":0,"seconds":0,"total":3600} {"hours":1,"minutes":2,"seconds":3,"total":3723}
+{"hours":0,"minutes":0,"seconds":0,"total":0}
+{"hours":0,"minutes":0,"seconds":0,"total":0}
+{"hours":0,"minutes":0,"seconds":1,"total":1}
+{"hours":0,"minutes":0,"seconds":0,"total":0}
+{"hours":0,"minutes":0,"seconds":0,"total":0}
+{"hours":0,"minutes":0,"seconds":0,"total":0}
+{"hours":0,"minutes":1,"seconds":1,"total":61}
+{"hours":0,"minutes":0,"seconds":0,"total":0}
+{"hours":1,"minutes":2,"seconds":3,"total":3723}
+{"hours":1,"minutes":2,"seconds":0,"total":3720}
+{"hours":0,"minutes":2,"seconds":0,"total":120}`,
 	stringifyResult: `
 00 01 [00s] [1m] [1m 2s]
 [00s] [1h] [1h 2m 3s]
@@ -364,11 +386,19 @@ kava.suite('extract-timestamp', function (suite, test) {
 	suite('extraction', function (suite, test) {
 		extractTests.forEach(function (value) {
 			test(value.input, function () {
-				deepEqual(
-					extractTimestamp(value.input),
-					value.result,
-					'result from extraction was as expected'
-				)
+				try {
+					deepEqual(
+						parse(value.input),
+						value.result,
+						'result from extraction was as expected'
+					)
+				} catch (err) {
+					if (value.error) {
+						errorEqual(err, value.error)
+					} else {
+						throw err
+					}
+				}
 			})
 		})
 	})
@@ -378,11 +408,18 @@ kava.suite('extract-timestamp', function (suite, test) {
 				for (const format of Object.keys(value.formats)) {
 					const expected = value.formats[format as Format]
 					test(format, function () {
-						equal(
-							stringifyTimestamp(value.input, format as Format),
-							expected,
-							'stringify result was as expected'
-						)
+						try {
+							equal(
+								// @ts-ignore for testing
+								stringify(value.input, format as Format),
+								expected,
+								'stringify result was as expected'
+							)
+						} catch (err) {
+							if (expected != null) {
+								throw err
+							}
+						}
 					})
 				}
 			})
@@ -390,7 +427,7 @@ kava.suite('extract-timestamp', function (suite, test) {
 	})
 	test('replace', function () {
 		equal(
-			replaceTimestamps(replaceTest.input, function (timestamp) {
+			replace(replaceTest.input, function (timestamp) {
 				return JSON.stringify(timestamp)
 			}),
 			replaceTest.replaceResult
@@ -398,8 +435,8 @@ kava.suite('extract-timestamp', function (suite, test) {
 	})
 	test('stringify', function () {
 		equal(
-			replaceTimestamps(replaceTest.input, function (timestamp) {
-				return timestamp ? `[${stringifyTimestamp(timestamp)}]` : ''
+			replace(replaceTest.input, function (timestamp) {
+				return `[${stringify(timestamp)}]`
 			}),
 			replaceTest.stringifyResult
 		)

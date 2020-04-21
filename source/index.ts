@@ -8,40 +8,104 @@ export const secondsInMinute = 60
 export const minutesInHour = 60
 export const secondsInHour = secondsInMinute * minutesInHour
 
-/** Timestamp object */
+/** Valid timestamp as returned from {@link make} */
 export interface Timestamp {
 	/**
 	 * Total number of seconds, including from hours and minutes.
 	 */
 	total: number
 	/**
-	 * Seconds excluding hours and minutes.
-	 * Will not exist if the seconds were not provided.
+	 * Seconds excluding hours and minutes..
 	 */
-	seconds?: number
+	seconds: number
 	/**
 	 * Minutes excluding hours.
-	 * Will not exist if the minutes were not provided.
 	 */
-	minutes?: number
+	minutes: number
 	/**
 	 * Hours.
-	 * Will not exist if the hours were not provided.
 	 */
-	hours?: number
+	hours: number
 }
 
-/**
- * Checks whether any of the timestamp's `hours`, `minutes`, and `seconds` has a value >= 0.
- * @returns `true` if there was a value, otherwise `false`.
- */
-export function verifyTimestamp(
-	timestamp: { hours?: any; minutes?: any; seconds?: any } | null
-): boolean {
-	if (timestamp == null) return false
-	const { hours, minutes, seconds } = timestamp
-	if (hours == null && minutes == null && seconds == null) return false
-	return true
+/** Possibly invalid timestamp sent to our functions */
+export type TimestampInput = Partial<Timestamp>
+
+/** Calculate the total seconds */
+export function sum(timestamp: TimestampInput): number {
+	return (
+		(timestamp.seconds ?? 0) +
+		(timestamp.minutes ?? 0) * secondsInMinute +
+		(timestamp.hours ?? 0) * secondsInHour
+	)
+}
+
+/** Verify the total is the sum */
+export function verify(timestamp: TimestampInput): void {
+	if (timestamp.total !== sum(timestamp))
+		throw new Error('timestamp total did not match the sum')
+}
+
+/** Helper to determine hours in minutes, and minutes in seconds (yes in that order) */
+function mod(
+	value: number = 0,
+	mod: number
+): { whole: number; remainder: number } {
+	const remainder = value % mod
+	const whole = Math.floor(value / mod)
+	return { remainder, whole }
+}
+
+/** Make a new valid timestamp from a potentially invalid one */
+export function make(timestamp: TimestampInput): Timestamp {
+	// if we have a total, use that
+	if (timestamp.total) {
+		// prepare
+		if (!timestamp.seconds) timestamp.seconds = 0
+		if (!timestamp.minutes) timestamp.minutes = 0
+		if (!timestamp.hours) timestamp.hours = 0
+		// verify
+		if (timestamp.seconds || timestamp.minutes || timestamp.hours) {
+			verify(timestamp)
+			return timestamp as Timestamp
+		}
+		// calculate the parts from the total
+		{
+			const { whole, remainder } = mod(timestamp.total, secondsInHour)
+			timestamp.hours = whole
+			timestamp.minutes = remainder
+		}
+		{
+			const { whole, remainder } = mod(
+				timestamp.minutes * secondsInMinute,
+				secondsInMinute
+			)
+			timestamp.minutes = whole
+			timestamp.seconds = remainder
+		}
+		verify(timestamp)
+		return timestamp as Timestamp
+	}
+	// otherwise, use the parts we have
+	if (timestamp.seconds) {
+		const { whole, remainder } = mod(timestamp.seconds, secondsInMinute)
+		timestamp.minutes = (timestamp.minutes || 0) + whole
+		timestamp.seconds = remainder
+	} else {
+		timestamp.seconds = 0
+	}
+	if (timestamp.minutes) {
+		const { whole, remainder } = mod(timestamp.minutes, minutesInHour)
+		timestamp.hours = (timestamp.hours || 0) + whole
+		timestamp.minutes = remainder
+	} else {
+		timestamp.minutes = 0
+	}
+	if (!timestamp.hours) {
+		timestamp.hours = 0
+	}
+	timestamp.total = sum(timestamp)
+	return timestamp as Timestamp
 }
 
 /** The timestamp stringify formats available to us */
@@ -63,14 +127,14 @@ function pad(value?: string | number): string {
 
 /**
  * Turn a timestamp object into a string.
- * @returns `null` if invalid, `00s` if empty, otherwise the timestamp in `Hh Mm Ss` format
+ * @returns an empty string if invalid, `00s` if empty, otherwise the timestamp in `Hh Mm Ss` format
  */
-export function stringifyTimestamp(
-	timestamp: Timestamp | null,
+export function stringify(
+	timestamp: Timestamp,
 	format: Format = Format.Short
-): string | null {
-	if (verifyTimestamp(timestamp) === false) return null
-	const { total, hours, minutes, seconds } = timestamp as Timestamp
+): string {
+	verify(timestamp)
+	const { total, hours, minutes, seconds } = timestamp
 	const parts = []
 	switch (format) {
 		case Format.Short:
@@ -103,69 +167,67 @@ export function stringifyTimestamp(
 		case Format.Seconds:
 			return String(total) + 's'
 		default:
-			throw new Error('stringifyTimestamp: invalid format')
+			throw new Error('stringify: invalid format')
 	}
 }
 
 /**
- * Make a timestamp object from hours, minutes, and seconds.
- * Will return an empty object, if the timestamp
+ * Parse the regular expression capture groups from our regex
  */
-export function makeTimestamp(
-	hours?: string | number,
-	minutes?: string | number,
-	seconds?: string | number
-): Timestamp | null {
-	if (verifyTimestamp({ hours, minutes, seconds }) === false) return null
-	const timestamp: Timestamp = { total: 0 }
-	if (hours != null) {
-		timestamp.hours = Number(hours)
-		timestamp.total += timestamp.hours * secondsInHour
-	}
-	if (minutes != null) {
-		timestamp.minutes = Number(minutes)
-		timestamp.total += timestamp.minutes * secondsInMinute
-	}
-	if (seconds != null) {
-		timestamp.seconds = Number(seconds)
-		timestamp.total += timestamp.seconds
-	}
-	return timestamp
-}
-
-function extractTimestampFromGroup(
+function parseCaptureGroups(
 	groups?: {
 		[key: string]: string
 	} | null
-): Timestamp | null {
-	if (!groups) return null
+): Timestamp {
+	if (!groups) throw new Error('no capture groups')
 
 	// 1h2m3s format
 	if (groups.bits) {
 		const bitsMatch = groups.bits.match(timestampRegex)
-		if (!bitsMatch || !bitsMatch.groups) return null
-		return makeTimestamp(
-			bitsMatch.groups.hours,
-			bitsMatch.groups.minutes,
-			bitsMatch.groups.seconds
-		)
+		if (!bitsMatch || !bitsMatch.groups)
+			throw new Error('no bits capture group')
+		return make({
+			hours: Number(bitsMatch.groups.hours || 0),
+			minutes: Number(bitsMatch.groups.minutes || 0),
+			seconds: Number(bitsMatch.groups.seconds || 0),
+		})
 	}
 
 	// 00:00:00 format
-	return makeTimestamp(groups.hours, groups.minutes, groups.seconds)
+	return make({
+		hours: Number(groups.hours || 0),
+		minutes: Number(groups.minutes || 0),
+		seconds: Number(groups.seconds || 0),
+	})
+}
+
+/** Options to parse to {@link regex} */
+export interface RegexOptions {
+	prefix?: string
+	suffix?: string
+	flags?: string
+}
+
+/** Generate the parsing regex */
+export function regex(opts: RegexOptions = {}): RegExp {
+	if (opts.prefix || opts.suffix || opts.flags) {
+		return new RegExp(
+			(opts.prefix ?? '') + timestampsRegex.source + (opts.suffix ?? ''),
+			opts.flags ?? ''
+		)
+	} else {
+		return timestampsRegex
+	}
 }
 
 /** Extract the timestamp out of a string */
-export function extractTimestamp(
-	input: string,
-	suffix: string = ''
-): Timestamp | null {
-	const regex = suffix
-		? new RegExp(timestampsRegex.source + suffix)
-		: timestampsRegex
-	const match = input.match(regex)
-	return extractTimestampFromGroup(match && match.groups)
+export function parse(input: string, opts?: RegexOptions): Timestamp {
+	const match = input.match(regex(opts))
+	return parseCaptureGroups(match && match.groups)
 }
+
+/** Alias for {@link parse} */
+export const extract = parse
 
 /**
  * Replace timestamp occurences within a string with the results of a replacer function
@@ -180,14 +242,14 @@ export function extractTimestamp(
  * @param replacer A method that takes in the timestamp object and should return a string to replace the timestamp text with
  * @param suffix An optional suffix to append to the regular expression for limiting what the timestamp regex can match (e.g. use ` [-—]` to only match timestamps suffixed by ` -` or ` —`)
  */
-export function replaceTimestamps(
+export function replace(
 	input: string,
 	replacer: (timestamp: Timestamp) => string | null | undefined | void,
-	suffix: string = ''
+	opts: RegexOptions = {}
 ) {
-	const regex = new RegExp(timestampsRegex.source + suffix, 'g')
-	return input.replace(regex, function (match, ...args) {
-		const timestamp = extractTimestampFromGroup(args[args.length - 1])
+	if (opts.flags == null) opts.flags = 'g'
+	return input.replace(regex(opts), function (match, ...args) {
+		const timestamp = parseCaptureGroups(args[args.length - 1])
 		// check if timestamp extraction was successful
 		if (timestamp) {
 			// check we have what we need
@@ -198,20 +260,29 @@ export function replaceTimestamps(
 	})
 }
 
+/** Format options for {@link makeYoutubeTimestamp} */
+export interface FormatOptions {
+	prefix?: string
+	suffix?: string
+	format?: Format
+}
+
 /** Make a HTML link for a youtube video to commence at a timestamp */
 export function makeYoutubeTimestamp(
 	timestamp: Timestamp,
 	youtubeID: string,
-	suffix: string = '',
-	format?: Format
+	opts: FormatOptions = {}
 ) {
-	const text = stringifyTimestamp(timestamp, format)
+	const text = stringify(timestamp, opts.format)
 	if (text) {
-		const url = `https://www.youtube.com/watch?v=${youtubeID}&t=${stringifyTimestamp(
-			timestamp,
-			Format.Tiny
-		)}`
-		return `<a href="${url}" title="View the video ${youtubeID} at ${text}">${text}</a>${suffix}`
+		const t = stringify(timestamp, Format.Tiny)
+		const title = stringify(timestamp, Format.Long)
+		const url = `https://www.youtube.com/watch?v=${youtubeID}&t=${t}`
+		return `${
+			opts.prefix || ''
+		}<a href="${url}" title="View the video ${youtubeID} at ${title}">${text}</a>${
+			opts.suffix || ''
+		}`
 	}
 	return text
 }

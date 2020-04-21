@@ -1,5 +1,9 @@
 # History
 
+## v2.0.0 2020 April 22
+
+-   Backwards compatibility break to simplify the signatures of the methods to provide more sanity to operations
+
 ## v1.5.0 2020 April 21
 
 -   Add suffix support to `extractTimestamp`
