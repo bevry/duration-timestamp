@@ -239,12 +239,15 @@ export const extract = parse
  * }, ' [-—]')
  * ```
  * @param input The string to replace the timestmaps within
- * @param replacer A method that takes in the timestamp object and should return a string to replace the timestamp text with
+ * @param replacer A method that takes in the timestamp object and should return a string to replace the timestamp text with, also receives the match
  * @param suffix An optional suffix to append to the regular expression for limiting what the timestamp regex can match (e.g. use ` [-—]` to only match timestamps suffixed by ` -` or ` —`)
  */
 export function replace(
 	input: string,
-	replacer: (timestamp: Timestamp) => string | null | undefined | void,
+	replacer: (
+		timestamp: Timestamp,
+		match: string
+	) => string | null | undefined | void,
 	opts: RegexOptions = {}
 ) {
 	if (opts.flags == null) opts.flags = 'g'
@@ -253,7 +256,7 @@ export function replace(
 		// check if timestamp extraction was successful
 		if (timestamp) {
 			// check we have what we need
-			const text = replacer(timestamp)
+			const text = replacer(timestamp, match)
 			if (text != null) return text
 		}
 		return match
@@ -265,6 +268,7 @@ export interface FormatOptions {
 	prefix?: string
 	suffix?: string
 	format?: Format
+	text?: string
 }
 
 /** Make a HTML link for a youtube video to commence at a timestamp */
@@ -273,14 +277,14 @@ export function makeYoutubeTimestamp(
 	youtubeID: string,
 	opts: FormatOptions = {}
 ) {
-	const text = stringify(timestamp, opts.format)
+	const text = opts.text || stringify(timestamp, opts.format)
 	if (text) {
 		const t = stringify(timestamp, Format.Tiny)
 		const title = stringify(timestamp, Format.Long)
 		const url = `https://www.youtube.com/watch?v=${youtubeID}&t=${t}`
-		return `${
-			opts.prefix || ''
-		}<a href="${url}" title="View the video ${youtubeID} at ${title}">${text}</a>${
+		return `${opts.prefix || ''}<a class="youtube-timetamp" data-total="${
+			timestamp.total
+		}" href="${url}" title="View the video ${youtubeID} at ${title}">${text}</a>${
 			opts.suffix || ''
 		}`
 	}

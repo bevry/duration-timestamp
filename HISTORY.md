@@ -1,5 +1,9 @@
 # History
 
+## v2.2.0 2020 April 23
+
+-   Add match to the replacer
+
 ## v2.1.0 2020 April 22
 
 -   Change edition compile targets to be more compatible
