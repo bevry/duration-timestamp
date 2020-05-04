@@ -233,7 +233,7 @@ export const extract = parse
  * Replace timestamp occurences within a string with the results of a replacer function
  * @example
  * ``` javascript
- * import {replaceTimestamps, youtubeTimestamp} from 'extract-timestamp'
+ * import {replaceTimestamps, youtubeTimestamp} from 'duration-timestamp'
  * const result = replaceTimestamps(html, function(timestamp) {
  * 	return youtubeTimestamp(timestamp, youtubeID, ' —')
  * }, ' [-—]')

@@ -382,7 +382,7 @@ const replaceTest = {
 [2m]`,
 }
 
-kava.suite('extract-timestamp', function (suite, test) {
+kava.suite('duration-timestamp', function (suite, test) {
 	suite('extraction', function (suite, test) {
 		extractTests.forEach(function (value) {
 			test(value.input, function () {

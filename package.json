@@ -1,14 +1,17 @@
 {
-  "name": "extract-timestamp",
-  "version": "2.2.0",
-  "description": "Get the hours, minutes, and seconds from a timestamp in the formats of hh:mm:ss and HsMmSs",
-  "homepage": "https://github.com/bevry/extract-timestamp",
+  "name": "duration-timestamp",
+  "version": "2.3.0",
+  "description": "Parse and stringify duration timestamps (such as hh:mm:ss and HhMmSs)",
+  "homepage": "https://github.com/bevry/duration-timestamp",
   "license": "MIT",
   "keywords": [
     "browser",
     "comment",
+    "dom",
+    "es2019",
     "extract",
     "module",
+    "node",
     "timestamp",
     "typed",
     "types",
@@ -56,11 +59,11 @@
     "Benjamin Lupton (http://balupton.com)"
   ],
   "bugs": {
-    "url": "https://github.com/bevry/extract-timestamp/issues"
+    "url": "https://github.com/bevry/duration-timestamp/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bevry/extract-timestamp.git"
+    "url": "https://github.com/bevry/duration-timestamp.git"
   },
   "engines": {
     "node": ">=10"
@@ -77,6 +80,20 @@
       "engines": false
     },
     {
+      "description": "TypeScript compiled against ESNext for Node.js with Require for modules",
+      "directory": "edition-esnext",
+      "entry": "index.js",
+      "tags": [
+        "javascript",
+        "esnext",
+        "require"
+      ],
+      "engines": {
+        "node": "14",
+        "browsers": false
+      }
+    },
+    {
       "description": "TypeScript compiled against ES2019 for Node.js with Require for modules",
       "directory": "edition-es2019",
       "entry": "index.js",
@@ -86,7 +103,7 @@
         "require"
       ],
       "engines": {
-        "node": "10 || 12 || 13",
+        "node": "10 || 12 || 13 || 14",
         "browsers": false
       }
     },
@@ -106,35 +123,39 @@
   ],
   "types": "source/index.ts",
   "type": "commonjs",
-  "main": "edition-es2019/index.js",
+  "main": "index.js",
   "browser": "edition-browsers/index.js",
   "module": "edition-browsers/index.js",
+  "dependencies": {
+    "editions": "^2.3.0"
+  },
   "devDependencies": {
     "@bevry/update-contributors": "^1.0.1",
-    "@typescript-eslint/eslint-plugin": "^2.29.0",
-    "@typescript-eslint/parser": "^2.29.0",
-    "assert-helpers": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/parser": "^2.30.0",
+    "assert-helpers": "^6.1.0",
     "eslint": "^6.8.0",
-    "eslint-config-bevry": "^3.1.0",
-    "eslint-config-prettier": "^6.10.1",
+    "eslint-config-bevry": "^3.3.0",
+    "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
     "kava": "^4.4.0",
-    "prettier": "^2.0.4",
+    "prettier": "^2.0.5",
     "projectz": "^1.19.1",
     "surge": "^0.21.3",
-    "typedoc": "^0.17.4",
+    "typedoc": "^0.17.6",
     "typescript": "^3.8.3",
     "valid-directory": "^1.6.0",
     "valid-module": "^1.0.0"
   },
   "scripts": {
     "our:clean": "rm -Rf ./docs ./edition* ./es2015 ./es5 ./out ./.next",
-    "our:compile": "npm run our:compile:edition-browsers && npm run our:compile:edition-es2019",
+    "our:compile": "npm run our:compile:edition-browsers && npm run our:compile:edition-es2019 && npm run our:compile:edition-esnext",
     "our:compile:edition-browsers": "tsc --module ESNext --target ES2019 --outDir ./edition-browsers --project tsconfig.json && test -d edition-browsers/source && ( mv edition-browsers/source edition-temp && rm -Rf edition-browsers && mv edition-temp edition-browsers ) || true",
     "our:compile:edition-es2019": "tsc --module commonjs --target ES2019 --outDir ./edition-es2019 --project tsconfig.json && test -d edition-es2019/source && ( mv edition-es2019/source edition-temp && rm -Rf edition-es2019 && mv edition-temp edition-es2019 ) || true",
+    "our:compile:edition-esnext": "tsc --module commonjs --target ESNext --outDir ./edition-esnext --project tsconfig.json && test -d edition-esnext/source && ( mv edition-esnext/source edition-temp && rm -Rf edition-esnext && mv edition-temp edition-esnext ) || true",
     "our:deploy": "echo no need for this project",
     "our:meta": "npm run our:meta:contributors && npm run our:meta:docs && npm run our:meta:projectz",
-    "our:meta:contributors": "update-contributors",
+    "our:meta:contributors": "npx @bevry/update-contributors",
     "our:meta:docs": "npm run our:meta:docs:typedoc",
     "our:meta:docs:typedoc": "rm -Rf ./docs && typedoc --mode file --exclude '**/+(*test*|node_modules)' --excludeExternals --name \"$npm_package_name\" --readme ./README.md --out ./docs ./source",
     "our:meta:projectz": "projectz compile",
@@ -148,12 +169,12 @@
     "our:setup:install": "npm install",
     "our:test": "npm run our:verify && npm test",
     "our:verify": "npm run our:verify:directory && npm run our:verify:eslint && npm run our:verify:module && npm run our:verify:prettier && npm run our:verify:typescript",
-    "our:verify:directory": "valid-directory",
+    "our:verify:directory": "npx valid-directory",
     "our:verify:eslint": "eslint --fix --ignore-pattern '**/*.d.ts' --ignore-pattern '**/vendor/' --ignore-pattern '**/node_modules/' --ext .mjs,.js,.jsx,.ts,.tsx ./source",
-    "our:verify:module": "valid-module",
+    "our:verify:module": "npx valid-module",
     "our:verify:prettier": "prettier --write .",
     "our:verify:typescript": "tsc --noEmit --project tsconfig.json",
-    "test": "node ./edition-es2019/test.js"
+    "test": "node ./test.js"
   },
   "eslintConfig": {
     "extends": [

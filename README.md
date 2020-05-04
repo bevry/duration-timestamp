@@ -1,17 +1,17 @@
 <!-- TITLE/ -->
 
-<h1>extract-timestamp</h1>
+<h1>duration-timestamp</h1>
 
 <!-- /TITLE -->
 
 
 <!-- BADGES/ -->
 
-<span class="badge-travisci"><a href="http://travis-ci.com/bevry/extract-timestamp" title="Check this project's build status on TravisCI"><img src="https://img.shields.io/travis/com/bevry/extract-timestamp/master.svg" alt="Travis CI Build Status" /></a></span>
-<span class="badge-npmversion"><a href="https://npmjs.org/package/extract-timestamp" title="View this project on NPM"><img src="https://img.shields.io/npm/v/extract-timestamp.svg" alt="NPM version" /></a></span>
-<span class="badge-npmdownloads"><a href="https://npmjs.org/package/extract-timestamp" title="View this project on NPM"><img src="https://img.shields.io/npm/dm/extract-timestamp.svg" alt="NPM downloads" /></a></span>
-<span class="badge-daviddm"><a href="https://david-dm.org/bevry/extract-timestamp" title="View the status of this project's dependencies on DavidDM"><img src="https://img.shields.io/david/bevry/extract-timestamp.svg" alt="Dependency Status" /></a></span>
-<span class="badge-daviddmdev"><a href="https://david-dm.org/bevry/extract-timestamp#info=devDependencies" title="View the status of this project's development dependencies on DavidDM"><img src="https://img.shields.io/david/dev/bevry/extract-timestamp.svg" alt="Dev Dependency Status" /></a></span>
+<span class="badge-travisci"><a href="http://travis-ci.com/bevry/duration-timestamp" title="Check this project's build status on TravisCI"><img src="https://img.shields.io/travis/com/bevry/duration-timestamp/master.svg" alt="Travis CI Build Status" /></a></span>
+<span class="badge-npmversion"><a href="https://npmjs.org/package/duration-timestamp" title="View this project on NPM"><img src="https://img.shields.io/npm/v/duration-timestamp.svg" alt="NPM version" /></a></span>
+<span class="badge-npmdownloads"><a href="https://npmjs.org/package/duration-timestamp" title="View this project on NPM"><img src="https://img.shields.io/npm/dm/duration-timestamp.svg" alt="NPM downloads" /></a></span>
+<span class="badge-daviddm"><a href="https://david-dm.org/bevry/duration-timestamp" title="View the status of this project's dependencies on DavidDM"><img src="https://img.shields.io/david/bevry/duration-timestamp.svg" alt="Dependency Status" /></a></span>
+<span class="badge-daviddmdev"><a href="https://david-dm.org/bevry/duration-timestamp#info=devDependencies" title="View the status of this project's development dependencies on DavidDM"><img src="https://img.shields.io/david/dev/bevry/duration-timestamp.svg" alt="Dev Dependency Status" /></a></span>
 <br class="badge-separator" />
 <span class="badge-githubsponsors"><a href="https://github.com/sponsors/balupton" title="Donate to this project using GitHub Sponsors"><img src="https://img.shields.io/badge/github-donate-yellow.svg" alt="GitHub Sponsors donate button" /></a></span>
 <span class="badge-patreon"><a href="https://patreon.com/bevry" title="Donate to this project using Patreon"><img src="https://img.shields.io/badge/patreon-donate-yellow.svg" alt="Patreon donate button" /></a></span>
@@ -28,14 +28,14 @@
 
 <!-- DESCRIPTION/ -->
 
-Get the hours, minutes, and seconds from a timestamp in the formats of hh:mm:ss and HsMmSs
+Parse and stringify duration timestamps (such as hh:mm:ss and HhMmSs)
 
 <!-- /DESCRIPTION -->
 
 
 ## Usage
 
-[Complete API Documentation.](http://master.extract-timestamp.bevry.surge.sh/docs/globals.html)
+[Complete API Documentation.](http://master.duration-timestamp.bevry.surge.sh/docs/globals.html)
 
 ### Compatibility
 
@@ -49,16 +49,16 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 <a href="https://npmjs.com" title="npm is a package manager for javascript"><h3>npm</h3></a>
 <ul>
-<li>Install: <code>npm install --save extract-timestamp</code></li>
-<li>Import: <code>import * as pkg from ('extract-timestamp')</code></li>
-<li>Require: <code>const pkg = require('extract-timestamp')</code></li>
+<li>Install: <code>npm install --save duration-timestamp</code></li>
+<li>Import: <code>import * as pkg from ('duration-timestamp')</code></li>
+<li>Require: <code>const pkg = require('duration-timestamp')</code></li>
 </ul>
 
 <a href="https://www.pika.dev/cdn" title="100% Native ES Modules CDN"><h3>pika</h3></a>
 
 ``` html
 <script type="module">
-    import * as pkg from '//cdn.pika.dev/extract-timestamp/^2.2.0'
+    import * as pkg from '//cdn.pika.dev/duration-timestamp/^2.3.0'
 </script>
 ```
 
@@ -66,7 +66,7 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 ``` html
 <script type="module">
-    import * as pkg from '//unpkg.com/extract-timestamp@^2.2.0'
+    import * as pkg from '//unpkg.com/duration-timestamp@^2.3.0'
 </script>
 ```
 
@@ -74,7 +74,7 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 ``` html
 <script type="module">
-    import * as pkg from '//dev.jspm.io/extract-timestamp@2.2.0'
+    import * as pkg from '//dev.jspm.io/duration-timestamp@2.3.0'
 </script>
 ```
 
@@ -82,10 +82,11 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 <p>This package is published with the following editions:</p>
 
-<ul><li><code>extract-timestamp/source/index.ts</code> is <a href="https://www.typescriptlang.org/" title="TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. ">TypeScript</a> source code with <a href="https://babeljs.io/docs/learn-es2015/#modules" title="ECMAScript Modules">Import</a> for modules</li>
-<li><code>extract-timestamp</code> aliases <code>extract-timestamp/edition-es2019/index.js</code></li>
-<li><code>extract-timestamp/edition-es2019/index.js</code> is <a href="https://www.typescriptlang.org/" title="TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. ">TypeScript</a> compiled against <a href="https://en.wikipedia.org/wiki/ECMAScript#10th_Edition_-_ECMAScript_2019" title="ECMAScript ES2019">ES2019</a> for <a href="https://nodejs.org" title="Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine">Node.js</a> with <a href="https://nodejs.org/dist/latest-v5.x/docs/api/modules.html" title="Node/CJS Modules">Require</a> for modules</li>
-<li><code>extract-timestamp/edition-browsers/index.js</code> is <a href="https://www.typescriptlang.org/" title="TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. ">TypeScript</a> compiled against <a href="https://en.wikipedia.org/wiki/ECMAScript#10th_Edition_-_ECMAScript_2019" title="ECMAScript ES2019">ES2019</a> for web browsers with <a href="https://babeljs.io/docs/learn-es2015/#modules" title="ECMAScript Modules">Import</a> for modules</li></ul>
+<ul><li><code>duration-timestamp</code> aliases <code>duration-timestamp/index.js</code> which uses the <a href="https://github.com/bevry/editions" title="You can use the Editions Autoloader to autoload the appropriate edition for your consumers environment">Editions Autoloader</a> to automatically select the correct edition for the consumer's environment</li>
+<li><code>duration-timestamp/source/index.ts</code> is <a href="https://www.typescriptlang.org/" title="TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. ">TypeScript</a> source code with <a href="https://babeljs.io/docs/learn-es2015/#modules" title="ECMAScript Modules">Import</a> for modules</li>
+<li><code>duration-timestamp/edition-esnext/index.js</code> is <a href="https://www.typescriptlang.org/" title="TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. ">TypeScript</a> compiled against <a href="https://en.wikipedia.org/wiki/ECMAScript#ES.Next" title="ECMAScript Next">ESNext</a> for <a href="https://nodejs.org" title="Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine">Node.js</a> with <a href="https://nodejs.org/dist/latest-v5.x/docs/api/modules.html" title="Node/CJS Modules">Require</a> for modules</li>
+<li><code>duration-timestamp/edition-es2019/index.js</code> is <a href="https://www.typescriptlang.org/" title="TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. ">TypeScript</a> compiled against <a href="https://en.wikipedia.org/wiki/ECMAScript#10th_Edition_-_ECMAScript_2019" title="ECMAScript ES2019">ES2019</a> for <a href="https://nodejs.org" title="Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine">Node.js</a> with <a href="https://nodejs.org/dist/latest-v5.x/docs/api/modules.html" title="Node/CJS Modules">Require</a> for modules</li>
+<li><code>duration-timestamp/edition-browsers/index.js</code> is <a href="https://www.typescriptlang.org/" title="TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. ">TypeScript</a> compiled against <a href="https://en.wikipedia.org/wiki/ECMAScript#10th_Edition_-_ECMAScript_2019" title="ECMAScript ES2019">ES2019</a> for web browsers with <a href="https://babeljs.io/docs/learn-es2015/#modules" title="ECMAScript Modules">Import</a> for modules</li></ul>
 
 <!-- /INSTALL -->
 
@@ -94,7 +95,7 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 <h2>History</h2>
 
-<a href="https://github.com/bevry/extract-timestamp/blob/master/HISTORY.md#files">Discover the release history by heading on over to the <code>HISTORY.md</code> file.</a>
+<a href="https://github.com/bevry/duration-timestamp/blob/master/HISTORY.md#files">Discover the release history by heading on over to the <code>HISTORY.md</code> file.</a>
 
 <!-- /HISTORY -->
 
@@ -103,7 +104,7 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 <h2>Contribute</h2>
 
-<a href="https://github.com/bevry/extract-timestamp/blob/master/CONTRIBUTING.md#files">Discover how you can contribute by heading on over to the <code>CONTRIBUTING.md</code> file.</a>
+<a href="https://github.com/bevry/duration-timestamp/blob/master/CONTRIBUTING.md#files">Discover how you can contribute by heading on over to the <code>CONTRIBUTING.md</code> file.</a>
 
 <!-- /CONTRIBUTE -->
 
@@ -137,9 +138,9 @@ No sponsors yet! Will you be the first?
 These amazing people have contributed code to this project:
 
 <ul><li>Benjamin Lupton</li>
-<li><a href="http://balupton.com">Benjamin Lupton</a> — <a href="https://github.com/bevry/extract-timestamp/commits?author=balupton" title="View the GitHub contributions of Benjamin Lupton on repository bevry/extract-timestamp">view contributions</a></li></ul>
+<li><a href="http://balupton.com">Benjamin Lupton</a> — <a href="https://github.com/bevry/duration-timestamp/commits?author=balupton" title="View the GitHub contributions of Benjamin Lupton on repository bevry/duration-timestamp">view contributions</a></li></ul>
 
-<a href="https://github.com/bevry/extract-timestamp/blob/master/CONTRIBUTING.md#files">Discover how you can contribute by heading on over to the <code>CONTRIBUTING.md</code> file.</a>
+<a href="https://github.com/bevry/duration-timestamp/blob/master/CONTRIBUTING.md#files">Discover how you can contribute by heading on over to the <code>CONTRIBUTING.md</code> file.</a>
 
 <!-- /BACKERS -->
 

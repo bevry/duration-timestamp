@@ -1,5 +1,10 @@
 # History
 
+## v2.3.0 2020 May 4
+
+-   Renamed from `extract-timestamp` to `duration-timestamp`
+-   Updated dependencies, [base files](https://github.com/bevry/base), and [editions](https://editions.bevry.me) using [boundation](https://github.com/bevry/boundation)
+
 ## v2.2.0 2020 April 23
 
 -   Add match to the replacer
