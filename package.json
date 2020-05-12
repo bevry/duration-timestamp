@@ -1,19 +1,20 @@
 {
   "name": "duration-timestamp",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "Parse and stringify duration timestamps (such as hh:mm:ss and HhMmSs)",
   "homepage": "https://github.com/bevry/duration-timestamp",
   "license": "MIT",
   "keywords": [
     "browser",
     "comment",
-    "es2018",
+    "dom",
     "es2019",
-    "es2020",
     "extract",
     "module",
     "node",
     "timestamp",
+    "typed",
+    "types",
     "typescript",
     "youtube"
   ],
@@ -44,7 +45,12 @@
       "opencollectiveUsername": "bevry",
       "patreonUsername": "bevry",
       "paypalURL": "https://bevry.me/paypal",
-      "wishlistURL": "https://bevry.me/wishlist"
+      "wishlistURL": "https://bevry.me/wishlist",
+      "travisTLD": "com",
+      "githubUsername": "bevry",
+      "githubRepository": "duration-timestamp",
+      "githubSlug": "bevry/duration-timestamp",
+      "npmPackageName": "duration-timestamp"
     }
   },
   "funding": "https://bevry.me/fund",
@@ -53,8 +59,8 @@
     "Benjamin Lupton <b@lupton.cc>"
   ],
   "contributors": [
-    "Benjamin Lupton <b@lupton.cc>",
-    "Benjamin Lupton (http://balupton.com)"
+    "Benjamin Lupton (https://github.com/balupton)",
+    "Benjamin Lupton <b@lupton.cc>"
   ],
   "bugs": {
     "url": "https://github.com/bevry/duration-timestamp/issues"
@@ -87,21 +93,7 @@
         "require"
       ],
       "engines": {
-        "node": true,
-        "browsers": false
-      }
-    },
-    {
-      "description": "TypeScript compiled against ES2020 for Node.js with Require for modules",
-      "directory": "edition-es2020",
-      "entry": "index.js",
-      "tags": [
-        "javascript",
-        "es2020",
-        "require"
-      ],
-      "engines": {
-        "node": true,
+        "node": "14",
         "browsers": false
       }
     },
@@ -115,21 +107,7 @@
         "require"
       ],
       "engines": {
-        "node": true,
-        "browsers": false
-      }
-    },
-    {
-      "description": "TypeScript compiled against ES2018 for Node.js with Require for modules",
-      "directory": "edition-es2018",
-      "entry": "index.js",
-      "tags": [
-        "javascript",
-        "es2018",
-        "require"
-      ],
-      "engines": {
-        "node": true,
+        "node": "10 || 12 || 13 || 14",
         "browsers": false
       }
     },
@@ -147,6 +125,7 @@
       }
     }
   ],
+  "types": "./compiled-types/",
   "type": "commonjs",
   "main": "index.js",
   "browser": "edition-browsers/index.js",
@@ -172,22 +151,11 @@
     "valid-directory": "^1.6.0",
     "valid-module": "^1.0.0"
   },
-  "eslintConfig": {
-    "extends": [
-      "bevry"
-    ]
-  },
-  "prettier": {
-    "semi": false,
-    "singleQuote": true
-  },
   "scripts": {
     "our:clean": "rm -Rf ./docs ./edition* ./es2015 ./es5 ./out ./.next",
-    "our:compile": "npm run our:compile:edition-browsers && npm run our:compile:edition-es2018 && npm run our:compile:edition-es2019 && npm run our:compile:edition-es2020 && npm run our:compile:edition-esnext && npm run our:compile:types",
+    "our:compile": "npm run our:compile:edition-browsers && npm run our:compile:edition-es2019 && npm run our:compile:edition-esnext && npm run our:compile:types",
     "our:compile:edition-browsers": "tsc --module ESNext --target ES2019 --outDir ./edition-browsers --project tsconfig.json && test -d edition-browsers/source && ( mv edition-browsers/source edition-temp && rm -Rf edition-browsers && mv edition-temp edition-browsers ) || true",
-    "our:compile:edition-es2018": "tsc --module commonjs --target ES2018 --outDir ./edition-es2018 --project tsconfig.json && test -d edition-es2018/source && ( mv edition-es2018/source edition-temp && rm -Rf edition-es2018 && mv edition-temp edition-es2018 ) || true",
     "our:compile:edition-es2019": "tsc --module commonjs --target ES2019 --outDir ./edition-es2019 --project tsconfig.json && test -d edition-es2019/source && ( mv edition-es2019/source edition-temp && rm -Rf edition-es2019 && mv edition-temp edition-es2019 ) || true",
-    "our:compile:edition-es2020": "tsc --module commonjs --target ES2020 --outDir ./edition-es2020 --project tsconfig.json && test -d edition-es2020/source && ( mv edition-es2020/source edition-temp && rm -Rf edition-es2020 && mv edition-temp edition-es2020 ) || true",
     "our:compile:edition-esnext": "tsc --module commonjs --target ESNext --outDir ./edition-esnext --project tsconfig.json && test -d edition-esnext/source && ( mv edition-esnext/source edition-temp && rm -Rf edition-esnext && mv edition-temp edition-esnext ) || true",
     "our:compile:types": "tsc --project tsconfig.json --emitDeclarationOnly --declaration --declarationDir ./compiled-types/ --declarationMap",
     "our:deploy": "echo no need for this project",
@@ -211,6 +179,15 @@
     "our:verify:module": "valid-module",
     "our:verify:prettier": "prettier --write .",
     "test": "node ./test.js"
+  },
+  "eslintConfig": {
+    "extends": [
+      "bevry"
+    ]
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
   },
   "boundation": {
     "dom": true

@@ -7,9 +7,7 @@
     "moduleResolution": "Node",
     "strict": true,
     "target": "ESNext",
-    "lib": []
+    "lib": ["DOM", "DOM.Iterable"]
   },
-  "include": [
-    "source"
-  ]
+  "include": ["source"]
 }
