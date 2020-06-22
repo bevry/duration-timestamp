@@ -597,9 +597,9 @@ editions@^2.1.0, editions@^2.2.0:
     semver "^6.3.0"
 
 editions@^3.4.0, editions@^3.8.0:
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/editions/-/editions-3.8.0.tgz#3cb9ed892b6e7429a185a5b75b9a163db9123c04"
-  integrity sha512-S+Rh0VfbZBzl4JrUm1oc5bxIcrHSJu3a2E+LXfoQFGFbDcjc0yOs7Eyh6PbO2NxwGXeZeshwRVTdrHSDmmfIPw==
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/editions/-/editions-3.9.0.tgz#b10a6dd7b399cb94363d2111b7f53c9b04c214e6"
+  integrity sha512-u/x7nwf2mgKxi1DDa8KbzmjTs2wKYGAjfeNxbSUomVS0t9CY9i5867SruRdgCnSxZeNjPY2CLQxhTYt7q2uC2A==
   dependencies:
     errlop "3.5.0"
     semver "6"
