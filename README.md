@@ -54,11 +54,11 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 <li>Require: <code>const pkg = require('duration-timestamp')</code></li>
 </ul>
 
-<a href="https://www.pika.dev/cdn" title="100% Native ES Modules CDN"><h3>pika</h3></a>
+<a href="https://www.skypack.dev" title="Skypack is a JavaScript Delivery Network for modern web apps"><h3>Skypack</h3></a>
 
 ``` html
 <script type="module">
-    import * as pkg from '//cdn.pika.dev/duration-timestamp/^2.18.0'
+    import * as pkg from '//cdn.skypack.dev/duration-timestamp@^2.19.0'
 </script>
 ```
 
@@ -66,7 +66,7 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 ``` html
 <script type="module">
-    import * as pkg from '//unpkg.com/duration-timestamp@^2.18.0'
+    import * as pkg from '//unpkg.com/duration-timestamp@^2.19.0'
 </script>
 ```
 
@@ -74,7 +74,7 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 ``` html
 <script type="module">
-    import * as pkg from '//dev.jspm.io/duration-timestamp@2.18.0'
+    import * as pkg from '//dev.jspm.io/duration-timestamp@2.19.0'
 </script>
 ```
 
