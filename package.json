@@ -153,7 +153,7 @@
   "browser": "edition-browsers/index.js",
   "module": "edition-browsers/index.js",
   "dependencies": {
-    "editions": "^3.15.0"
+    "editions": "^4.0.0"
   },
   "devDependencies": {
     "@bevry/update-contributors": "^1.14.0",
