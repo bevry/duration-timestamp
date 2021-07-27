@@ -1,8 +1,10 @@
 /** The regular expression used for finding a timestamp */
-const timestampsRegex = /(?:(?:(?<hours>\d{1,2}):)?(?<minutes>\d{1,2}):(?<seconds>\d{1,2})|(?<bits>(?:\d{1,2}(?:[hms]| ?(?:hour|min(?:ute)?|sec(?:ond)?)s?) ?)+))/
+const timestampsRegex =
+	/(?:(?:(?<hours>\d{1,2}):)?(?<minutes>\d{1,2}):(?<seconds>\d{1,2})|(?<bits>(?:\d{1,2}(?:[hms]| ?(?:hour|min(?:ute)?|sec(?:ond)?)s?) ?)+))/
 
 /** The regular expression used for extracting a timestmap in 1h2m3s format */
-const timestampRegex = /^(?:(?<hours>\d{1,2})(?:h|\s?hours?)\s?)?(?:(?<minutes>\d{1,2})(?:m|\s?min(?:ute)?s?)\s?)?(?:(?<seconds>\d{1,2})(?:s|\s?sec(?:ond)?s?)\s?)?$/
+const timestampRegex =
+	/^(?:(?<hours>\d{1,2})(?:h|\s?hours?)\s?)?(?:(?<minutes>\d{1,2})(?:m|\s?min(?:ute)?s?)\s?)?(?:(?<seconds>\d{1,2})(?:s|\s?sec(?:ond)?s?)\s?)?$/
 
 export const secondsInMinute = 60
 export const minutesInHour = 60
