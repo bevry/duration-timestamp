@@ -35,7 +35,7 @@ Parse and stringify duration timestamps (such as hh:mm:ss and HhMmSs)
 
 ## Usage
 
-[Complete API Documentation.](http://master.duration-timestamp.bevry.surge.sh/docs/globals.html)
+[Complete API Documentation.](http://master.duration-timestamp.bevry.surge.sh/docs/)
 
 ### Compatibility
 
@@ -58,7 +58,7 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 ``` html
 <script type="module">
-    import * as pkg from '//cdn.skypack.dev/duration-timestamp@^2.23.0'
+    import * as pkg from '//cdn.skypack.dev/duration-timestamp@^2.24.0'
 </script>
 ```
 
@@ -66,7 +66,7 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 ``` html
 <script type="module">
-    import * as pkg from '//unpkg.com/duration-timestamp@^2.23.0'
+    import * as pkg from '//unpkg.com/duration-timestamp@^2.24.0'
 </script>
 ```
 
@@ -74,7 +74,7 @@ Firefox is not supported, as Firefox must [add support](https://bugzilla.mozilla
 
 ``` html
 <script type="module">
-    import * as pkg from '//dev.jspm.io/duration-timestamp@2.23.0'
+    import * as pkg from '//dev.jspm.io/duration-timestamp@2.24.0'
 </script>
 ```
 
