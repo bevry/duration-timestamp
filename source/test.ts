@@ -390,7 +390,7 @@ kava.suite('duration-timestamp', function (suite, test) {
 					deepEqual(
 						parse(value.input),
 						value.result,
-						'result from extraction was as expected'
+						'result from extraction was as expected',
 					)
 				} catch (err) {
 					if (value.error) {
@@ -413,7 +413,7 @@ kava.suite('duration-timestamp', function (suite, test) {
 								// @ts-ignore for testing
 								stringify(value.input, format as Format),
 								expected,
-								'stringify result was as expected'
+								'stringify result was as expected',
 							)
 						} catch (err) {
 							if (expected != null) {
@@ -430,7 +430,7 @@ kava.suite('duration-timestamp', function (suite, test) {
 			replace(replaceTest.input, function (timestamp) {
 				return JSON.stringify(timestamp)
 			}),
-			replaceTest.replaceResult
+			replaceTest.replaceResult,
 		)
 	})
 	test('stringify', function () {
@@ -438,7 +438,7 @@ kava.suite('duration-timestamp', function (suite, test) {
 			replace(replaceTest.input, function (timestamp) {
 				return `[${stringify(timestamp)}]`
 			}),
-			replaceTest.stringifyResult
+			replaceTest.stringifyResult,
 		)
 	})
 })
