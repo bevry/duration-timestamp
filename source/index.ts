@@ -51,7 +51,7 @@ export function verify(timestamp: TimestampInput): void {
 /** Helper to determine hours in minutes, and minutes in seconds (yes in that order) */
 function mod(
 	value: number = 0,
-	mod: number,
+	mod: number
 ): { whole: number; remainder: number } {
 	const remainder = value % mod
 	const whole = Math.floor(value / mod)
@@ -80,7 +80,7 @@ export function make(timestamp: TimestampInput): Timestamp {
 		{
 			const { whole, remainder } = mod(
 				timestamp.minutes * secondsInMinute,
-				secondsInMinute,
+				secondsInMinute
 			)
 			timestamp.minutes = whole
 			timestamp.seconds = remainder
@@ -133,7 +133,7 @@ function pad(value?: string | number): string {
  */
 export function stringify(
 	timestamp: Timestamp,
-	format: Format = Format.Short,
+	format: Format = Format.Short
 ): string {
 	verify(timestamp)
 	const { total, hours, minutes, seconds } = timestamp
@@ -179,7 +179,7 @@ export function stringify(
 function parseCaptureGroups(
 	groups?: {
 		[key: string]: string
-	} | null,
+	} | null
 ): Timestamp {
 	if (!groups) throw new Error('no capture groups')
 
@@ -215,7 +215,7 @@ export function regex(opts: RegexOptions = {}): RegExp {
 	if (opts.prefix || opts.suffix || opts.flags) {
 		return new RegExp(
 			(opts.prefix ?? '') + timestampsRegex.source + (opts.suffix ?? ''),
-			opts.flags ?? '',
+			opts.flags ?? ''
 		)
 	} else {
 		return timestampsRegex
@@ -248,9 +248,9 @@ export function replace(
 	input: string,
 	replacer: (
 		timestamp: Timestamp,
-		match: string,
+		match: string
 	) => string | null | undefined | void,
-	opts: RegexOptions = {},
+	opts: RegexOptions = {}
 ) {
 	if (opts.flags == null) opts.flags = 'g'
 	return input.replace(regex(opts), function (match, ...args) {
@@ -277,7 +277,7 @@ export interface FormatOptions {
 export function makeYoutubeTimestamp(
 	timestamp: Timestamp,
 	youtubeID: string,
-	opts: FormatOptions = {},
+	opts: FormatOptions = {}
 ) {
 	const text = opts.text || stringify(timestamp, opts.format)
 	if (text) {
