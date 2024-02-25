@@ -170,7 +170,7 @@
     "@bevry/update-contributors": "^1.23.0",
     "@types/node": "^20.9.2",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^6.11.0",
+    "@typescript-eslint/parser": "^7.0.2",
     "assert-helpers": "^11.4.0",
     "eslint": "^8.54.0",
     "eslint-config-bevry": "^5.0.0",
