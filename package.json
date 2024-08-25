@@ -172,7 +172,7 @@
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.1.0",
     "assert-helpers": "^11.4.0",
-    "eslint": "^8.54.0",
+    "eslint": "^9.9.1",
     "eslint-config-bevry": "^5.0.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
