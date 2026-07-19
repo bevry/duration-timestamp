@@ -181,7 +181,7 @@
     "projectz": "^4.2.0",
     "surge": "^0.33.0",
     "typedoc": "^0.28.0",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "valid-directory": "^4.4.0",
     "valid-module": "^2.4.0"
   },
